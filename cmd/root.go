@@ -9,7 +9,10 @@ import (
 var options egoOptions
 
 var rootCmd = &cobra.Command{
-	Use: "ego",
+	Use:          "ego [flags] [strings]",
+	Short:        "echo alternative written in Go",
+	Long:         "echo alternative written in Go.",
+	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := ego(os.Stdout, args, options); err != nil {
 			return err
