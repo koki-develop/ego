@@ -30,5 +30,6 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().SortFlags = false
 	rootCmd.Flags().BoolVarP(&(options.NoNewline), "no-newline", "n", false, "do not print the trailing newline character")
 }
