@@ -61,6 +61,8 @@ func interpretEscapes(w io.Writer, s string) error {
 				_, err = w.Write([]byte{'\a'})
 			case 'b':
 				_, err = w.Write([]byte{'\b'})
+			case 'e':
+				_, err = w.Write([]byte{'\x1b'})
 			case 'f':
 				_, err = w.Write([]byte{'\f'})
 			case 'n':
