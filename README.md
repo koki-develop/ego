@@ -44,6 +44,7 @@ Flags:
   -n, --no-newline                do not print the trailing newline character
   -e, --enable-escapes            enable interpretation of backslash escapes (default true)
   -E, --disable-escapes           disable interpretation of backslash escapes
+      --force-style               force styled output
       --foreground string         foreground color
       --background string         background color
       --bold                      bold strings
