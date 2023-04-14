@@ -12,6 +12,8 @@ type egoOptions struct {
 	EnableEscapes  bool
 	DisableEscapes bool
 
+	DisableStyle bool
+
 	Foreground string
 	Background string
 
@@ -39,8 +41,10 @@ func ego(w io.Writer, args []string, options egoOptions) error {
 		}
 	}
 
-	if err := style(w, options); err != nil {
-		return err
+	if !options.DisableStyle {
+		if err := style(w, options); err != nil {
+			return err
+		}
 	}
 
 	for i, arg := range args {
@@ -61,8 +65,10 @@ func ego(w io.Writer, args []string, options egoOptions) error {
 		}
 	}
 
-	if err := resetStyle(w); err != nil {
-		return err
+	if !options.DisableStyle {
+		if err := resetStyle(w); err != nil {
+			return err
+		}
 	}
 
 	if !options.NoNewline {

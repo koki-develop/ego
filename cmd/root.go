@@ -6,11 +6,13 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/term"
 )
 
 var (
-	version string
-	options egoOptions
+	version    string
+	options    egoOptions
+	forceStyle bool
 )
 
 var rootCmd = &cobra.Command{
@@ -19,6 +21,11 @@ var rootCmd = &cobra.Command{
 	Long:         "echo alternative written in Go.",
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		ist := term.IsTerminal(int(os.Stdout.Fd()))
+		if !ist && !forceStyle {
+			options.DisableStyle = true
+		}
+
 		if err := ego(os.Stdout, args, options); err != nil {
 			return err
 		}
@@ -58,6 +65,8 @@ func init() {
 	rootCmd.Flags().BoolVarP(&(options.EnableEscapes), "enable-escapes", "e", true, "enable interpretation of backslash escapes")
 	rootCmd.Flags().BoolVarP(&(options.DisableEscapes), "disable-escapes", "E", false, "disable interpretation of backslash escapes")
 	rootCmd.MarkFlagsMutuallyExclusive("enable-escapes", "disable-escapes")
+
+	rootCmd.Flags().BoolVar(&forceStyle, "force-style", false, "force styled output")
 
 	rootCmd.Flags().StringVar(&(options.Foreground), "foreground", "", "foreground color")
 	rootCmd.Flags().StringVar(&(options.Background), "background", "", "background color")
