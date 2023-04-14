@@ -34,7 +34,10 @@ func init() {
 	rootCmd.Flags().SortFlags = false
 
 	rootCmd.Flags().BoolVarP(&(options.NoNewline), "no-newline", "n", false, "do not print the trailing newline character")
+
 	rootCmd.Flags().BoolVarP(&(options.EnableEscapes), "enable-escapes", "e", true, "enable interpretation of backslash escapes")
+	rootCmd.Flags().BoolVarP(&(options.DisableEscapes), "disable-escapes", "E", false, "disable interpretation of backslash escapes")
+	rootCmd.MarkFlagsMutuallyExclusive("enable-escapes", "disable-escapes")
 
 	rootCmd.Flags().StringVar(&(options.Foreground), "foreground", "", "foreground color")
 	rootCmd.Flags().StringVar(&(options.Background), "background", "", "background color")

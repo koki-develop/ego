@@ -8,8 +8,9 @@ import (
 )
 
 type egoOptions struct {
-	NoNewline     bool
-	EnableEscapes bool
+	NoNewline      bool
+	EnableEscapes  bool
+	DisableEscapes bool
 
 	Foreground string
 	Background string
@@ -43,7 +44,7 @@ func ego(w io.Writer, args []string, options egoOptions) error {
 	}
 
 	for i, arg := range args {
-		if options.EnableEscapes {
+		if !options.DisableEscapes && options.EnableEscapes {
 			if err := interpretEscapes(w, arg); err != nil {
 				return err
 			}
