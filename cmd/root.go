@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -48,4 +49,5 @@ func init() {
 	rootCmd.Flags().StringVar(&(options.Separator), "separator", " ", "separator between strings")
 
 	rootCmd.Flags().BoolVar(&(options.Timestamp), "timestamp", false, "print timestamp")
+	rootCmd.Flags().StringVar(&(options.TimestampFormat), "timestamp-format", time.RFC3339, "timestamp format")
 }

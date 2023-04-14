@@ -24,12 +24,13 @@ type egoOptions struct {
 
 	Separator string
 
-	Timestamp bool
+	Timestamp       bool
+	TimestampFormat string
 }
 
 func ego(w io.Writer, args []string, options egoOptions) error {
 	if options.Timestamp {
-		if _, err := w.Write([]byte(time.Now().Format(time.RFC3339))); err != nil {
+		if _, err := w.Write([]byte(time.Now().Format(options.TimestampFormat))); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte{' '}); err != nil {
