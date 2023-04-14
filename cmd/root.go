@@ -2,12 +2,16 @@ package cmd
 
 import (
 	"os"
+	"runtime/debug"
 	"time"
 
 	"github.com/spf13/cobra"
 )
 
-var options egoOptions
+var (
+	version string
+	options egoOptions
+)
 
 var rootCmd = &cobra.Command{
 	Use:          "ego [flags] [strings]",
@@ -31,6 +35,22 @@ func Execute() {
 }
 
 func init() {
+	/*
+	 * version
+	 */
+
+	if version == "" {
+		if info, ok := debug.ReadBuildInfo(); ok {
+			version = info.Main.Version
+		}
+	}
+
+	rootCmd.Version = version
+
+	/*
+	 * flags
+	 */
+
 	rootCmd.Flags().SortFlags = false
 
 	rootCmd.Flags().BoolVarP(&(options.NoNewline), "no-newline", "n", false, "do not print the trailing newline character")
