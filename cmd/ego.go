@@ -20,6 +20,8 @@ type egoOptions struct {
 	Blink         bool
 	RapidBlink    bool
 	Strikethrough bool
+
+	Separator string
 }
 
 func ego(w io.Writer, args []string, options egoOptions) error {
@@ -39,7 +41,7 @@ func ego(w io.Writer, args []string, options egoOptions) error {
 		}
 
 		if i+1 != len(args) {
-			if _, err := w.Write([]byte{' '}); err != nil {
+			if _, err := w.Write([]byte(options.Separator)); err != nil {
 				return err
 			}
 		}
