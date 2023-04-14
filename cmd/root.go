@@ -35,6 +35,6 @@ func init() {
 	rootCmd.Flags().BoolVarP(&(options.NoNewline), "no-newline", "n", false, "do not print the trailing newline character")
 	rootCmd.Flags().BoolVarP(&(options.EnableEscapes), "enable-escapes", "e", true, "enable interpretation of backslash escapes")
 
-	rootCmd.Flags().StringVar(&(options.Foreground), "fg", "", "foreground color")
-	rootCmd.Flags().StringVar(&(options.Background), "bg", "", "background color")
+	rootCmd.Flags().StringVar(&(options.Foreground), "foreground", "", "foreground color")
+	rootCmd.Flags().StringVar(&(options.Background), "background", "", "background color")
 }
