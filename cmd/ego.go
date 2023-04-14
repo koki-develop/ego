@@ -134,42 +134,42 @@ func interpretEscapes(w io.Writer, s string) error {
 }
 
 var (
-	ansiFg = map[string][]byte{
-		"black":     []byte("[30m"),
-		"red":       []byte("[31m"),
-		"green":     []byte("[32m"),
-		"yellow":    []byte("[33m"),
-		"blue":      []byte("[34m"),
-		"magenta":   []byte("[35m"),
-		"cyan":      []byte("[36m"),
-		"white":     []byte("[37m"),
-		"hiblack":   []byte("[90m"),
-		"hired":     []byte("[91m"),
-		"higreen":   []byte("[92m"),
-		"hiyellow":  []byte("[93m"),
-		"hiblue":    []byte("[94m"),
-		"himagenta": []byte("[95m"),
-		"hicyan":    []byte("[96m"),
-		"hiwhite":   []byte("[97m"),
+	ansiFg = map[string]string{
+		"black":     "30",
+		"red":       "31",
+		"green":     "32",
+		"yellow":    "33",
+		"blue":      "34",
+		"magenta":   "35",
+		"cyan":      "36",
+		"white":     "37",
+		"hiblack":   "90",
+		"hired":     "91",
+		"higreen":   "92",
+		"hiyellow":  "93",
+		"hiblue":    "94",
+		"himagenta": "95",
+		"hicyan":    "96",
+		"hiwhite":   "97",
 	}
 
-	ansiBg = map[string][]byte{
-		"black":     []byte("[40m"),
-		"red":       []byte("[41m"),
-		"green":     []byte("[42m"),
-		"yellow":    []byte("[43m"),
-		"blue":      []byte("[44m"),
-		"magenta":   []byte("[45m"),
-		"cyan":      []byte("[46m"),
-		"white":     []byte("[47m"),
-		"hiblack":   []byte("[100m"),
-		"hired":     []byte("[101m"),
-		"higreen":   []byte("[102m"),
-		"hiyellow":  []byte("[103m"),
-		"hiblue":    []byte("[104m"),
-		"himagenta": []byte("[105m"),
-		"hicyan":    []byte("[106m"),
-		"hiwhite":   []byte("[107m"),
+	ansiBg = map[string]string{
+		"black":     "40",
+		"red":       "41",
+		"green":     "42",
+		"yellow":    "43",
+		"blue":      "44",
+		"magenta":   "45",
+		"cyan":      "46",
+		"white":     "47",
+		"hiblack":   "100",
+		"hired":     "101",
+		"higreen":   "102",
+		"hiyellow":  "103",
+		"hiblue":    "104",
+		"himagenta": "105",
+		"hicyan":    "106",
+		"hiwhite":   "107",
 	}
 )
 
@@ -179,10 +179,7 @@ func style(w io.Writer, options egoOptions) error {
 		if !ok {
 			return fmt.Errorf("unsupported foreground color: %s", options.Foreground)
 		}
-		if _, err := w.Write([]byte{'\x1b'}); err != nil {
-			return err
-		}
-		if _, err := w.Write(ansi); err != nil {
+		if err := writeAnsi(w, ansi); err != nil {
 			return err
 		}
 	}
@@ -192,10 +189,7 @@ func style(w io.Writer, options egoOptions) error {
 		if !ok {
 			return fmt.Errorf("unsupported background color: %s", options.Background)
 		}
-		if _, err := w.Write([]byte{'\x1b'}); err != nil {
-			return err
-		}
-		if _, err := w.Write(ansi); err != nil {
+		if err := writeAnsi(w, ansi); err != nil {
 			return err
 		}
 	}
@@ -204,10 +198,21 @@ func style(w io.Writer, options egoOptions) error {
 }
 
 func resetStyle(w io.Writer) error {
-	if _, err := w.Write([]byte{'\x1b'}); err != nil {
+	if err := writeAnsi(w, "0"); err != nil {
 		return err
 	}
-	if _, err := w.Write([]byte("[0m")); err != nil {
+
+	return nil
+}
+
+func writeAnsi(w io.Writer, ansi string) error {
+	if _, err := w.Write([]byte{'\x1b', '['}); err != nil {
+		return err
+	}
+	if _, err := w.Write([]byte(ansi)); err != nil {
+		return err
+	}
+	if _, err := w.Write([]byte{'m'}); err != nil {
 		return err
 	}
 
