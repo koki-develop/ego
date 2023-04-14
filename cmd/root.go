@@ -46,4 +46,6 @@ func init() {
 	rootCmd.Flags().BoolVar(&(options.Strikethrough), "strikethrough", false, "strikethrough strings")
 
 	rootCmd.Flags().StringVar(&(options.Separator), "separator", " ", "separator between strings")
+
+	rootCmd.Flags().BoolVar(&(options.Timestamp), "timestamp", false, "print timestamp")
 }

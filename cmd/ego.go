@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 )
 
 type egoOptions struct {
@@ -22,9 +23,20 @@ type egoOptions struct {
 	Strikethrough bool
 
 	Separator string
+
+	Timestamp bool
 }
 
 func ego(w io.Writer, args []string, options egoOptions) error {
+	if options.Timestamp {
+		if _, err := w.Write([]byte(time.Now().Format(time.RFC3339))); err != nil {
+			return err
+		}
+		if _, err := w.Write([]byte{' '}); err != nil {
+			return err
+		}
+	}
+
 	if err := style(w, options); err != nil {
 		return err
 	}
