@@ -1,7 +1,5 @@
 Output docs/demo.gif
 
-Require echo
-
 Set Shell "bash"
 Set FontSize 32
 Set Width 1200
