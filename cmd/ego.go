@@ -12,6 +12,14 @@ type egoOptions struct {
 
 	Foreground string
 	Background string
+
+	Bold          bool
+	Faint         bool
+	Italic        bool
+	Underline     bool
+	Blink         bool
+	RapidBlink    bool
+	Strikethrough bool
 }
 
 func ego(w io.Writer, args []string, options egoOptions) error {
@@ -190,6 +198,48 @@ func style(w io.Writer, options egoOptions) error {
 			return fmt.Errorf("unsupported background color: %s", options.Background)
 		}
 		if err := writeAnsi(w, ansi); err != nil {
+			return err
+		}
+	}
+
+	if options.Bold {
+		if err := writeAnsi(w, "1"); err != nil {
+			return err
+		}
+	}
+
+	if options.Faint {
+		if err := writeAnsi(w, "2"); err != nil {
+			return err
+		}
+	}
+
+	if options.Italic {
+		if err := writeAnsi(w, "3"); err != nil {
+			return err
+		}
+	}
+
+	if options.Underline {
+		if err := writeAnsi(w, "4"); err != nil {
+			return err
+		}
+	}
+
+	if options.Blink {
+		if err := writeAnsi(w, "5"); err != nil {
+			return err
+		}
+	}
+
+	if options.RapidBlink {
+		if err := writeAnsi(w, "6"); err != nil {
+			return err
+		}
+	}
+
+	if options.Strikethrough {
+		if err := writeAnsi(w, "9"); err != nil {
 			return err
 		}
 	}
