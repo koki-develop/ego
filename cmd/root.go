@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/term"
 )
 
 var (
@@ -19,6 +20,11 @@ var rootCmd = &cobra.Command{
 	Long:         "echo alternative written in Go.",
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		ist := term.IsTerminal(int(os.Stdout.Fd()))
+		if !ist {
+			options.DisableStyle = true
+		}
+
 		if err := ego(os.Stdout, args, options); err != nil {
 			return err
 		}
