@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"strconv"
@@ -32,49 +33,52 @@ type egoOptions struct {
 }
 
 func ego(w io.Writer, args []string, options egoOptions) error {
+	b := new(bytes.Buffer)
+
 	if options.Timestamp {
-		if _, err := w.Write([]byte(time.Now().Format(options.TimestampFormat))); err != nil {
-			return err
-		}
-		if _, err := w.Write([]byte{' '}); err != nil {
+		if _, err := b.WriteString(time.Now().Format(options.TimestampFormat) + " "); err != nil {
 			return err
 		}
 	}
 
 	if !options.DisableStyle {
-		if err := style(w, options); err != nil {
+		if err := style(b, options); err != nil {
 			return err
 		}
 	}
 
 	for i, arg := range args {
 		if !options.DisableEscapes && options.EnableEscapes {
-			if err := interpretEscapes(w, arg); err != nil {
+			if err := interpretEscapes(b, arg); err != nil {
 				return err
 			}
 		} else {
-			if _, err := w.Write([]byte(arg)); err != nil {
+			if _, err := b.WriteString(arg); err != nil {
 				return err
 			}
 		}
 
 		if i+1 != len(args) {
-			if _, err := w.Write([]byte(options.Separator)); err != nil {
+			if _, err := b.WriteString(options.Separator); err != nil {
 				return err
 			}
 		}
 	}
 
 	if !options.DisableStyle {
-		if err := resetStyle(w); err != nil {
+		if err := resetStyle(b); err != nil {
 			return err
 		}
 	}
 
 	if !options.NoNewline {
-		if _, err := w.Write([]byte{'\n'}); err != nil {
+		if _, err := b.WriteRune('\n'); err != nil {
 			return err
 		}
+	}
+
+	if _, err := io.Copy(w, b); err != nil {
+		return err
 	}
 
 	return nil
